@@ -9,6 +9,7 @@ class EventLog extends Base
     protected $fillable = [
         'event_id',
         'class_id',
+        'class_ref_id',
         'log_id',
     ];
 }
