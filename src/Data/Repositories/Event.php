@@ -102,6 +102,7 @@ class Event extends Repository
                     'log_id'   => $this->logRepository->getCurrentLogId(),
                     'event_id' => $evenId,
                     'class_id' => $classId,
+                    'class_ref_id' => isset($event['class_ref_id']) ? $event['class_ref_id'] : null,
                 ]
             );
         }
