@@ -4,8 +4,8 @@ namespace PragmaRX\Tracker\Data\Repositories;
 
 use Carbon\Carbon;
 use PragmaRX\Support\Config;
-use PragmaRX\Support\PhpSession;
 use Ramsey\Uuid\Uuid as UUID;
+use Illuminate\Session\Store as IlluminateSession;
 
 class Session extends Repository
 {
@@ -17,7 +17,7 @@ class Session extends Repository
 
     protected $relations = ['device', 'user', 'log', 'language', 'agent', 'referer', 'geoIp', 'cookie'];
 
-    public function __construct($model, Config $config, PhpSession $session)
+    public function __construct($model, Config $config, IlluminateSession $session)
     {
         $this->config = $config;
 
