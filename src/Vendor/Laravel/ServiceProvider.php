@@ -80,6 +80,8 @@ class ServiceProvider extends PragmaRXServiceProvider
         $this->loadRoutes();
 
         $this->registerErrorHandler();
+        
+        $this->registerGlobalViewComposers();
 
         if (!$this->getConfig('use_middleware')) {
             $this->bootTracker();
@@ -130,9 +132,7 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $this->registerDatatables();
 
-            $this->registerMessageRepository();
-
-            $this->registerGlobalViewComposers();
+            $this->registerMessageRepository();            
         }
     }
 
