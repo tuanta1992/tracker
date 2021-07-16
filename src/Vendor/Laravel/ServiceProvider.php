@@ -132,8 +132,6 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $this->registerGlobalEventLogger();
 
-            $this->registerDatatables();
-
             $this->registerMessageRepository();
         }
     }
@@ -489,6 +487,8 @@ class ServiceProvider extends PragmaRXServiceProvider
             return false;
         }
 
+        $this->registerDatatables();
+
         $prefix = $this->getConfig('stats_base_uri');
 
         $namespace = $this->getConfig('stats_controllers_namespace');
@@ -536,9 +536,11 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     protected function registerDatatables()
     {
-        $this->registerServiceProvider('Bllim\Datatables\DatatablesServiceProvider');
+        if ($this->getConfig('stats_panel_enabled')) {
+            $this->registerServiceProvider('Bllim\Datatables\DatatablesServiceProvider');
 
-        $this->registerServiceAlias('Datatable', 'Bllim\Datatables\Facade\Datatables');
+            $this->registerServiceAlias('Datatable', 'Bllim\Datatables\Facade\Datatables');
+        }
     }
 
     /**
