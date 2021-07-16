@@ -97,12 +97,14 @@ class Event extends Repository
 
             $classId = $this->getClassId($objectName);
 
+            $classRefId = $this->getClassRefId($event);
+
             $this->eventLogRepository->create(
                 [
                     'log_id'   => $this->logRepository->getCurrentLogId(),
                     'event_id' => $evenId,
                     'class_id' => $classId,
-                    'class_ref_id' => isset($event['class_ref_id']) ? $event['class_ref_id'] : null,
+                    'class_ref_id' => $classRefId,
                 ]
             );
         }
@@ -153,6 +155,22 @@ class Event extends Repository
                 ['name']
             )
             : null;
+    }
+
+    /**
+     * Get the object name from an event.
+     *
+     * @param $event
+     *
+     * @return null|string
+     */
+    private function getClassRefId($event)
+    {
+        if (!isset($event['object']) || !is_object($event['object']) || !method_exists($event['object'], 'getKey')) {
+            return null;
+        }
+
+        return $event['object']->getKey();
     }
 
     /**
