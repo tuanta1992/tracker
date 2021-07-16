@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel;
 
+use Illuminate\Console\Command;
+use Illuminate\Session\SessionManager;
 use PragmaRX\Support\GeoIp\GeoIp;
 use PragmaRX\Support\PhpSession;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
@@ -80,7 +82,9 @@ class ServiceProvider extends PragmaRXServiceProvider
         $this->loadRoutes();
 
         $this->registerErrorHandler();
-        
+
+        $this->registerExecutionCallback();
+
         $this->registerGlobalViewComposers();
 
         if (!$this->getConfig('use_middleware')) {
@@ -122,8 +126,6 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $this->registerUpdateGeoIpCommand();
 
-            $this->registerExecutionCallback();
-
             $this->registerUserCheckCallback();
 
             $this->registerSqlQueryLogWatcher();
@@ -132,7 +134,7 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $this->registerDatatables();
 
-            $this->registerMessageRepository();            
+            $this->registerMessageRepository();
         }
     }
 
@@ -281,7 +283,7 @@ class ServiceProvider extends PragmaRXServiceProvider
                 new Session(
                     $sessionModel,
                     $app['tracker.config'],
-                    new PhpSession()
+                    $app['session.store'],
                 ),
                 $logRepository,
                 new Path($pathModel),
@@ -342,11 +344,13 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     protected function registerTablesCommand()
     {
-        $this->app->singleton('tracker.tables.command', function ($app) {
-            return new TablesCommand();
-        });
+        if ($this->app->runningInConsole()) {
+            $this->app->singleton('tracker.tables.command', function ($app) {
+                return new TablesCommand();
+            });
 
-        $this->commands('tracker.tables.command');
+            $this->commands('tracker.tables.command');
+        }
     }
 
     protected function registerExecutionCallback()
@@ -573,11 +577,13 @@ class ServiceProvider extends PragmaRXServiceProvider
 
     protected function registerUpdateGeoIpCommand()
     {
-        $this->app->singleton('tracker.updategeoip.command', function ($app) {
-            return new UpdateGeoIp();
-        });
+        if ($this->app->runningInConsole()) {
+            $this->app->singleton('tracker.updategeoip.command', function ($app) {
+                return new UpdateGeoIp();
+            });
 
-        $this->commands('tracker.updategeoip.command');
+            $this->commands('tracker.updategeoip.command');
+        }
     }
 
     protected function registerUserCheckCallback()
