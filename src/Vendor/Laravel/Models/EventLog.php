@@ -11,5 +11,8 @@ class EventLog extends Base
         'class_id',
         'class_ref_id',
         'log_id',
+        'extra_data',
     ];
+
+    protected $casts = [ 'extra_data' => 'array' ];
 }
