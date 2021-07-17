@@ -90,9 +90,9 @@ class Event extends Repository
     {
         $event = $this->makeEventArray($event);
 
-        $evenId = $this->getEventId($event);
+        $eventId = $this->getEventId($event);
 
-        if ($evenId) {
+        if ($eventId) {
             $objectName = $this->getObjectName($event);
 
             $classId = $this->getClassId($objectName);
@@ -102,9 +102,10 @@ class Event extends Repository
             $this->eventLogRepository->create(
                 [
                     'log_id'   => $this->logRepository->getCurrentLogId(),
-                    'event_id' => $evenId,
+                    'event_id' => $eventId,
                     'class_id' => $classId,
                     'class_ref_id' => $classRefId,
+                    'extra_data' => $event['extra_data'] ?? null,
                 ]
             );
         }
