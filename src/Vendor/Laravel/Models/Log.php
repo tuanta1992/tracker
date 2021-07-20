@@ -44,6 +44,11 @@ class Log extends Base
     {
         return $this->belongsTo($this->getConfig()->get('route_path_model'), 'route_path_id');
     }
+    
+    public function events()
+    {
+        return $this->hasMany($this->getConfig()->get('event_log_model'), 'log_id');
+    }
 
     public function pageViews($minutes, $results)
     {
