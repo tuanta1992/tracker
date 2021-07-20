@@ -21,7 +21,7 @@ class Session extends Base
 
     public function user()
     {
-        return $this->belongsTo($this->getConfig()->get('user_model'));
+        return $this->belongsTo($this->getConfig()->get('user_model'), 'user_id');
     }
 
     public function device()
