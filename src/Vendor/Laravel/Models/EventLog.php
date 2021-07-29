@@ -4,6 +4,8 @@ namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
 class EventLog extends Base
 {
+    public $modelCacheEnabled = false;
+    
     protected $table = 'tracker_events_log';
 
     protected $fillable = [

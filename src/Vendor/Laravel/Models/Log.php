@@ -4,6 +4,8 @@ namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
 class Log extends Base
 {
+    public $modelCacheEnabled = false;
+
     protected $table = 'tracker_log';
 
     protected $fillable = [
