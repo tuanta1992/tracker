@@ -479,6 +479,10 @@ class RepositoryManager implements RepositoryManagerInterface
             if (!isset($url['host'])) {
                 return;
             }
+            
+            if (in_array($url['host'], config('tracker.do_not_track_referer_domains', []))) {
+                return;
+            }
 
             $parts = explode('.', $url['host']);
 
