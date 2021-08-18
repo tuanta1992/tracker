@@ -140,7 +140,10 @@ class Session extends Repository
                     $model = $this->find($this->sessionInfo['id']);
                 }
 
-                $model->setAttribute($key, $value);
+                // Avoid setting the user_id back to null
+                if ($key !== 'user_id' || !is_null($value)) {
+                    $model->setAttribute($key, $value);
+                }
 
                 $model->save();
 
