@@ -15,20 +15,6 @@ use Psr\Log\LoggerInterface;
 
 class Tracker
 {
-    protected $config;
-
-    /**
-     * @var \Illuminate\Routing\Router
-     */
-    protected $route;
-
-    protected $logger;
-
-    /**
-     * @var \Illuminate\Foundation\Application
-     */
-    protected $laravel;
-
     protected $enabled = true;
 
     protected $sessionData;
@@ -37,33 +23,15 @@ class Tracker
 
     protected $booted = false;
 
-    /**
-     * @var MessageRepository
-     */
-    protected $messageRepository;
-
     public function __construct(
-        Config $config,
-        DataRepositoryManager $dataRepositoryManager,
-        Request $request,
-        Router $route,
-        LoggerInterface $logger,
-        Laravel $laravel,
-        MessageRepository $messageRepository
+        protected Config $config,
+        public DataRepositoryManager $dataRepositoryManager,
+        public Request $request,
+        protected Router $route,
+        protected LoggerInterface $logger,
+        protected Laravel $laravel,
+        protected MessageRepository $messageRepository
     ) {
-        $this->config = $config;
-
-        $this->dataRepositoryManager = $dataRepositoryManager;
-
-        $this->request = $request;
-
-        $this->route = $route;
-
-        $this->logger = $logger;
-
-        $this->laravel = $laravel;
-
-        $this->messageRepository = $messageRepository;
     }
 
     public function allSessions()

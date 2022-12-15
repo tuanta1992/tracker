@@ -38,211 +38,43 @@ use PragmaRX\Tracker\Support\MobileDetect;
 class RepositoryManager implements RepositoryManagerInterface
 {
     /**
-     * @var Path
-     */
-    private $pathRepository;
-
-    /**
-     * @var Query
-     */
-    private $queryRepository;
-
-    /**
-     * @var QueryArgument
-     */
-    private $queryArgumentRepository;
-
-    /**
-     * @var Domain
-     */
-    private $domainRepository;
-
-    /**
-     * @var Referer
-     */
-    private $refererRepository;
-
-    /**
-     * @var Repositories\Route
-     */
-    private $routeRepository;
-
-    /**
-     * @var Repositories\RoutePath
-     */
-    private $routePathRepository;
-
-    /**
-     * @var Repositories\RoutePathParameter
-     */
-    private $routePathParameterRepository;
-
-    /**
-     * @var Error
-     */
-    private $errorRepository;
-
-    /**
-     * @var GeoIP
-     */
-    private $geoIp;
-
-    private $geoIpRepository;
-
-    /**
-     * @var Repositories\SqlQuery
-     */
-    private $sqlQueryRepository;
-
-    /**
-     * @var Repositories\SqlQueryBinding
-     */
-    private $sqlQueryBindingRepository;
-
-    /**
-     * @var Repositories\SqlQueryLog
-     */
-    private $sqlQueryLogRepository;
-
-    private $sqlQueryBindingParameterRepository;
-
-    /**
-     * @var Repositories\Connection
-     */
-    private $connectionRepository;
-
-    /**
-     * @var Repositories\Event
-     */
-    private $eventRepository;
-
-    /**
-     * @var Repositories\EventLog
-     */
-    private $eventLogRepository;
-
-    /**
-     * @var Repositories\SystemClass
-     */
-    private $systemClassRepository;
-
-    private $userAgentParser;
-
-    /**
-     * @var CrawlerDetector
-     */
-    private $crawlerDetector;
-
-    /**
-     * @var Repositories\Language
-     */
-    private $languageRepository;
-
-    /**
-     * @var Repositories\Language
-     */
-    private $languageDetect;
-
-    /**
      * @param \PragmaRX\Tracker\Support\UserAgentParser|null $userAgentParser
      */
     public function __construct(
-        GeoIP $geoIp,
-        MobileDetect $mobileDetect,
-        $userAgentParser,
-        Authentication $authentication,
-        IlluminateSession $session,
-        Config $config,
-        Session $sessionRepository,
-        Log $logRepository,
-        Path $pathRepository,
-        Query $queryRepository,
-        QueryArgument $queryArgumentRepository,
-        Agent $agentRepository,
-        Device $deviceRepository,
-        Cookie $cookieRepository,
-        Domain $domainRepository,
-        Referer $refererRepository,
-        Route $routeRepository,
-        RoutePath $routePathRepository,
-        RoutePathParameter $routePathParameterRepository,
-        Error $errorRepository,
-        GeoIpRepository $geoIpRepository,
-        SqlQuery $sqlQueryRepository,
-        SqlQueryBinding $sqlQueryBindingRepository,
-        SqlQueryBindingParameter $sqlQueryBindingParameterRepository,
-        SqlQueryLog $sqlQueryLogRepository,
-        Connection $connectionRepository,
-        Event $eventRepository,
-        EventLog $eventLogRepository,
-        SystemClass $systemClassRepository,
-        CrawlerDetector $crawlerDetector,
-        Language $languageRepository,
-        LanguageDetect $languageDetect
+        public GeoIP $geoIp,
+        public MobileDetect $mobileDetect,
+        public $userAgentParser,
+        public Authentication $authentication,
+        public IlluminateSession $session,
+        public Config $config,
+        public Session $sessionRepository,
+        public Log $logRepository,
+        public Path $pathRepository,
+        public Query $queryRepository,
+        public QueryArgument $queryArgumentRepository,
+        public Agent $agentRepository,
+        public Device $deviceRepository,
+        public Cookie $cookieRepository,
+        public Domain $domainRepository,
+        public Referer $refererRepository,
+        public Route $routeRepository,
+        public RoutePath $routePathRepository,
+        public RoutePathParameter $routePathParameterRepository,
+        public Error $errorRepository,
+        public GeoIpRepository $geoIpRepository,
+        public SqlQuery $sqlQueryRepository,
+        public SqlQueryBinding $sqlQueryBindingRepository,
+        public SqlQueryBindingParameter $sqlQueryBindingParameterRepository,
+        public SqlQueryLog $sqlQueryLogRepository,
+        public Connection $connectionRepository,
+        public Event $eventRepository,
+        public EventLog $eventLogRepository,
+        public SystemClass $systemClassRepository,
+        public CrawlerDetector $crawlerDetector,
+        public Language $languageRepository,
+        public LanguageDetect $languageDetect
     ) {
-        $this->authentication = $authentication;
 
-        $this->mobileDetect = $mobileDetect;
-
-        $this->userAgentParser = $userAgentParser;
-
-        $this->session = $session;
-
-        $this->config = $config;
-
-        $this->geoIp = $geoIp;
-
-        $this->sessionRepository = $sessionRepository;
-
-        $this->logRepository = $logRepository;
-
-        $this->pathRepository = $pathRepository;
-
-        $this->queryRepository = $queryRepository;
-
-        $this->queryArgumentRepository = $queryArgumentRepository;
-
-        $this->agentRepository = $agentRepository;
-
-        $this->deviceRepository = $deviceRepository;
-
-        $this->cookieRepository = $cookieRepository;
-
-        $this->domainRepository = $domainRepository;
-
-        $this->refererRepository = $refererRepository;
-
-        $this->routeRepository = $routeRepository;
-
-        $this->routePathRepository = $routePathRepository;
-
-        $this->routePathParameterRepository = $routePathParameterRepository;
-
-        $this->errorRepository = $errorRepository;
-
-        $this->geoIpRepository = $geoIpRepository;
-
-        $this->sqlQueryRepository = $sqlQueryRepository;
-
-        $this->sqlQueryBindingRepository = $sqlQueryBindingRepository;
-
-        $this->sqlQueryBindingParameterRepository = $sqlQueryBindingParameterRepository;
-
-        $this->sqlQueryLogRepository = $sqlQueryLogRepository;
-
-        $this->connectionRepository = $connectionRepository;
-
-        $this->eventRepository = $eventRepository;
-
-        $this->eventLogRepository = $eventLogRepository;
-
-        $this->systemClassRepository = $systemClassRepository;
-
-        $this->crawlerDetector = $crawlerDetector;
-
-        $this->languageRepository = $languageRepository;
-
-        $this->languageDetect = $languageDetect;
     }
 
     public function checkSessionData($newData, $currentData)

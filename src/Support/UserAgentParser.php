@@ -16,7 +16,7 @@ class UserAgentParser
 
     public $originalUserAgent;
 
-    public function __construct($basePath, $userAgent = '')
+    public function __construct(public $basePath, $userAgent = '')
     {
         $this->parser = Parser::create()->parse($this->getUserAgent($userAgent));
 
@@ -25,8 +25,6 @@ class UserAgentParser
         $this->operatingSystem = $this->parser->os;
 
         $this->device = $this->parser->device;
-
-        $this->basePath = $basePath;
 
         $this->originalUserAgent = $this->parser->originalUserAgent;
     }

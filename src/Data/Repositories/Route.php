@@ -6,7 +6,7 @@ use PragmaRX\Support\Config;
 
 class Route extends Repository
 {
-    public function __construct($model, Config $config)
+    public function __construct($model, public Config $config)
     {
         parent::__construct($model);
 
