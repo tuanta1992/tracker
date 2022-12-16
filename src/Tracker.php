@@ -137,7 +137,7 @@ class Tracker
     {
         return [
             'session_id' => $this->getSessionId(true),
-            'method'     => $this->request->method(),
+            'method'     => $this->validateMethod($this->request->method()),
             'path_id'    => $this->getPathId(),
             'query_id'   => $this->getQueryId(),
             'referer_id' => $this->getRefererId(),
@@ -146,6 +146,20 @@ class Tracker
             'is_json'    => $this->request->isJson(),
             'wants_json' => $this->request->wantsJson(),
         ];
+    }
+
+    protected function validateMethod($method) {
+        static $methods = [
+            'GET',
+            'POST',
+            'HEAD',
+            'PUT',
+            'DELETE',
+        ];
+
+        $method = trim(strtoupper($method));
+
+        return in_array($method, $methods) ? $method : 'UNKNOWN';
     }
 
     public function getLogger()

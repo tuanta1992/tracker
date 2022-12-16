@@ -22,6 +22,8 @@ class Log extends Base
         'error_id',
     ];
 
+    const UPDATED_AT = null;
+
     public function session()
     {
         return $this->belongsTo($this->getConfig()->get('session_model'));
