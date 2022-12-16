@@ -20,7 +20,6 @@ class TrackerLogOptimizations extends Migration
         // Remove unnecessary column
         $this->builder->table('tracker_log', function($table) {
             $table->dropIndex('tracker_log_updated_at_index');
-            $table->dropColumn('updated_at');
         });
     }
 
