@@ -98,9 +98,10 @@ class Session extends Repository
         } else {
             $session = $this->find($this->getSessionData('id'));
 
-            $session->updated_at = Carbon::now();
-
-            $session->save();
+            if (!$session->updated_at || $session->updated_at->gte(now()->subMinutes(2))) {
+                $session->updated_at = Carbon::now();
+                $session->save();
+            }
 
             $this->sessionInfo['id'] = $this->getSessionData('id');
         }
