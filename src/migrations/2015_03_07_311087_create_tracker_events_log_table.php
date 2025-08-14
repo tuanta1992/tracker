@@ -1,46 +1,32 @@
 <?php
 
-use PragmaRX\Tracker\Support\Migration;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateTrackerEventsLogTable extends Migration
+return new class extends Migration
 {
     /**
-     * Table related to this migration.
-     *
-     * @var string
-     */
-    private $table = 'tracker_events_log';
-
-    /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function migrateUp()
+    public function up(): void
     {
-        $this->builder->create(
-            $this->table,
-            function ($table) {
-                $table->bigIncrements('id');
-
-                $table->bigInteger('event_id')->unsigned()->index();
-                $table->bigInteger('class_id')->unsigned()->nullable()->index();
-                $table->bigInteger('log_id')->unsigned()->index();
-
-                $table->timestamps();
-                $table->index('created_at');
-                $table->index('updated_at');
-            }
-        );
+        Schema::connection('tracker')->create('tracker_events_log', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('event_id')->index();
+            $table->unsignedBigInteger('class_id')->nullable()->index();
+            $table->unsignedBigInteger('log_id')->index();
+            $table->timestamps();
+            $table->index('created_at');
+            $table->index('updated_at');
+        });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function migrateDown()
+    public function down(): void
     {
-        $this->drop($this->table);
+        Schema::connection('tracker')->dropIfExists('tracker_events_log');
     }
-}
+};

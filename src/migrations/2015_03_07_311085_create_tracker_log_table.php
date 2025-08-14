@@ -1,53 +1,41 @@
 <?php
 
-use PragmaRX\Tracker\Support\Migration;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateTrackerLogTable extends Migration
+return new class extends Migration
 {
     /**
-     * Table related to this migration.
-     *
-     * @var string
-     */
-    private $table = 'tracker_log';
-
-    /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function migrateUp()
+    public function up(): void
     {
-        $this->builder->create(
-            $this->table,
-            function ($table) {
-                $table->bigIncrements('id');
+        Schema::connection('tracker')->create('tracker_log', function (Blueprint $table) {
+            $table->bigIncrements('id');
 
-                $table->bigInteger('session_id')->unsigned()->index();
-                $table->bigInteger('path_id')->unsigned()->nullable()->index();
-                $table->bigInteger('query_id')->unsigned()->nullable()->index();
-                $table->string('method', 10)->index();
-                $table->bigInteger('route_path_id')->unsigned()->nullable()->index();
-                $table->boolean('is_ajax');
-                $table->boolean('is_secure');
-                $table->boolean('is_json');
-                $table->boolean('wants_json');
-                $table->bigInteger('error_id')->unsigned()->nullable()->index();
+            $table->unsignedBigInteger('session_id')->index();
+            $table->unsignedBigInteger('path_id')->nullable()->index();
+            $table->unsignedBigInteger('query_id')->nullable()->index();
+            $table->string('method', 10)->index();
+            $table->unsignedBigInteger('route_path_id')->nullable()->index();
+            $table->boolean('is_ajax');
+            $table->boolean('is_secure');
+            $table->boolean('is_json');
+            $table->boolean('wants_json');
+            $table->unsignedBigInteger('error_id')->nullable()->index();
 
-                $table->timestamps();
-                $table->index('created_at');
-                $table->index('updated_at');
-            }
-        );
+            $table->timestamps();
+            $table->index('created_at');
+            $table->index('updated_at');
+        });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function migrateDown()
+    public function down(): void
     {
-        $this->drop($this->table);
+        Schema::connection('tracker')->dropIfExists('tracker_log');
     }
-}
+};

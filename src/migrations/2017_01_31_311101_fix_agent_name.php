@@ -1,44 +1,33 @@
 <?php
 
-use PragmaRX\Tracker\Support\Migration;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class FixAgentName extends Migration
+return new class extends Migration
 {
-    /**
-     * Table related to this migration.
-     *
-     * @var string
-     */
     private $table = 'tracker_agents';
 
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function migrateUp()
+    public function up(): void
     {
         try {
-            $this->builder->table(
-                $this->table,
-                function ($table) {
-                    $table->dropUnique('tracker_agents_name_unique');
-                }
-            );
+            // Bỏ unique cũ trên name
+            Schema::connection('tracker')->table($this->table, function (Blueprint $table) {
+                $table->dropUnique('tracker_agents_name_unique');
+            });
 
-            $this->builder->table(
-                $this->table,
-                function ($table) {
-                    $table->mediumText('name')->change();
-                }
-            );
+            // Thay đổi name thành mediumText
+            Schema::connection('tracker')->table($this->table, function (Blueprint $table) {
+                $table->mediumText('name')->change();
+            });
 
-            $this->builder->table(
-                $this->table,
-                function ($table) {
-                    $table->unique('id', 'tracker_agents_name_unique'); // this is a dummy index
-                }
-            );
+            // Tạo dummy unique trên id để không lỗi khi cần unique
+            Schema::connection('tracker')->table($this->table, function (Blueprint $table) {
+                $table->unique('id', 'tracker_agents_name_unique');
+            });
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -46,20 +35,16 @@ class FixAgentName extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function migrateDown()
+    public function down(): void
     {
         try {
-            $this->builder->table(
-                $this->table,
-                function ($table) {
-                    $table->string('name', 255)->change();
-                    $table->unique('name');
-                }
-            );
+            Schema::connection('tracker')->table($this->table, function (Blueprint $table) {
+                $table->string('name', 255)->change();
+                $table->unique('name');
+            });
         } catch (\Exception $e) {
+            // Tránh lỗi rollback nếu không khả thi
         }
     }
-}
+};

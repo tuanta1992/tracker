@@ -1,35 +1,37 @@
 <?php
 
-use PragmaRX\Tracker\Support\Migration;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
-class TrackerLogOptimizations extends Migration
+return new class extends Migration
 {
+    private $table = 'tracker_log';
 
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function migrateUp()
+    public function up(): void
     {
-        $connection = $this->manager->connection(config('tracker.connection'));
+        // Chuyển cột method sang ENUM
+        DB::connection('tracker')->statement(
+            "ALTER TABLE {$this->table} MODIFY COLUMN method ENUM('GET', 'POST', 'HEAD', 'PUT', 'DELETE', 'UNKNOWN') DEFAULT 'UNKNOWN'"
+        );
 
-        // Convert to enum
-        $connection->statement("ALTER TABLE tracker_log MODIFY COLUMN method ENUM('GET', 'POST', 'HEAD', 'PUT', 'DELETE', 'UNKNOWN') default 'UNKNOWN'");
-
-        // Remove unnecessary column
-        $this->builder->table('tracker_log', function($table) {
+        // Xoá index không cần thiết
+        Schema::connection('tracker')->table($this->table, function (Blueprint $table) {
             $table->dropIndex('tracker_log_updated_at_index');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function migrateDown()
+    public function down(): void
     {
+        // Rollback ENUM về varchar
+        DB::connection('tracker')->statement(
+            "ALTER TABLE {$this->table} MODIFY COLUMN method VARCHAR(255) DEFAULT 'UNKNOWN'"
+        );
 
+        // Tạo lại index
+        Schema::connection('tracker')->table($this->table, function (Blueprint $table) {
+            $table->index('updated_at');
+        });
     }
-}
+};

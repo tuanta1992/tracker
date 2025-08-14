@@ -1,46 +1,36 @@
 <?php
 
-use PragmaRX\Tracker\Support\Migration;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use PragmaRX\Tracker\Vendor\Laravel\Models\Agent;
 
-class AddAgentNameHash extends Migration
+return new class extends Migration
 {
-    /**
-     * Table related to this migration.
-     *
-     * @var string
-     */
     private $table = 'tracker_agents';
 
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function migrateUp()
+    public function up(): void
     {
         try {
-            $this->builder->table(
-                $this->table,
-                function ($table) {
-                    $table->dropUnique('tracker_agents_name_unique');
+            // Bỏ unique cũ trên name và thêm cột name_hash
+            Schema::connection('tracker')->table($this->table, function (Blueprint $table) {
+                $table->dropUnique('tracker_agents_name_unique');
+                $table->string('name_hash', 65)->nullable();
+            });
 
-                    $table->string('name_hash', 65)->nullable();
-                }
-            );
-
+            // Tạo hash cho dữ liệu hiện tại
             Agent::all()->each(function ($agent) {
                 $agent->name_hash = hash('sha256', $agent->name);
-
                 $agent->save();
             });
 
-            $this->builder->table(
-                $this->table,
-                function ($table) {
-                    $table->unique('name_hash');
-                }
-            );
+            // Tạo unique trên name_hash
+            Schema::connection('tracker')->table($this->table, function (Blueprint $table) {
+                $table->unique('name_hash');
+            });
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -48,23 +38,17 @@ class AddAgentNameHash extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function migrateDown()
+    public function down(): void
     {
         try {
-            $this->builder->table(
-                $this->table,
-                function ($table) {
-                    $table->dropUnique('tracker_agents_name_hash_unique');
-
-                    $table->dropColumn('name_hash');
-
-                    $table->mediumText('name')->unique()->change();
-                }
-            );
+            Schema::connection('tracker')->table($this->table, function (Blueprint $table) {
+                $table->dropUnique('tracker_agents_name_hash_unique');
+                $table->dropColumn('name_hash');
+                $table->mediumText('name')->unique()->change();
+            });
         } catch (\Exception $e) {
+            // Tránh lỗi rollback nếu không khả thi
         }
     }
-}
+};

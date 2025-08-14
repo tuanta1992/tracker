@@ -1,30 +1,22 @@
 <?php
 
-use PragmaRX\Tracker\Support\Migration;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class FixQueryArguments extends Migration
+return new class extends Migration
 {
-    /**
-     * Table related to this migration.
-     *
-     * @var string
-     */
     private $table = 'tracker_query_arguments';
 
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function migrateUp()
+    public function up(): void
     {
         try {
-            $this->builder->table(
-                $this->table,
-                function ($table) {
-                    $table->string('value')->nullable()->change();
-                }
-            );
+            Schema::connection('tracker')->table($this->table, function (Blueprint $table) {
+                $table->string('value')->nullable()->change();
+            });
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -32,20 +24,15 @@ class FixQueryArguments extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function migrateDown()
+    public function down(): void
     {
         try {
-            $this->builder->table(
-                $this->table,
-                function ($table) {
-                    $table->string('value')->change();
-                }
-            );
+            Schema::connection('tracker')->table($this->table, function (Blueprint $table) {
+                $table->string('value')->change();
+            });
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
     }
-}
+};

@@ -1,47 +1,35 @@
 <?php
 
-use PragmaRX\Tracker\Support\Migration;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateTrackerSqlQueriesTable extends Migration
+return new class extends Migration
 {
     /**
-     * Table related to this migration.
-     *
-     * @var string
-     */
-    private $table = 'tracker_sql_queries';
-
-    /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function migrateUp()
+    public function up(): void
     {
-        $this->builder->create(
-            $this->table,
-            function ($table) {
-                $table->bigIncrements('id');
+        Schema::connection('tracker')->create('tracker_sql_queries', function (Blueprint $table) {
+            $table->bigIncrements('id');
 
-                $table->string('sha1', 40)->index();
-                $table->text('statement');
-                $table->double('time')->index();
-                $table->integer('connection_id')->unsigned();
+            $table->string('sha1', 40)->index();
+            $table->text('statement');
+            $table->double('time')->index();
+            $table->unsignedInteger('connection_id');
 
-                $table->timestamps();
-                $table->index('created_at');
-                $table->index('updated_at');
-            }
-        );
+            $table->timestamps();
+            $table->index('created_at');
+            $table->index('updated_at');
+        });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function migrateDown()
+    public function down(): void
     {
-        $this->drop($this->table);
+        Schema::connection('tracker')->dropIfExists('tracker_sql_queries');
     }
-}
+};

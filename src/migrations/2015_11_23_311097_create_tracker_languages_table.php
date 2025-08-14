@@ -1,47 +1,37 @@
 <?php
 
-use PragmaRX\Tracker\Support\Migration;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateTrackerLanguagesTable extends Migration
+return new class extends Migration
 {
-    /**
-     * Table related to this migration.
-     *
-     * @var string
-     */
     private $table = 'tracker_languages';
 
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function migrateUp()
+    public function up(): void
     {
-        $this->builder->create(
-            $this->table,
-            function ($table) {
-                $table->bigIncrements('id');
+        Schema::connection('tracker')->create($this->table, function (Blueprint $table) {
+            $table->bigIncrements('id');
 
-                $table->string('preference')->index();
-                $table->string('language-range')->index();
+            $table->string('preference')->index();
+            $table->string('language-range')->index();
 
-                $table->unique(['preference', 'language-range']);
+            $table->unique(['preference', 'language-range']);
 
-                $table->timestamps();
-                $table->index('created_at');
-                $table->index('updated_at');
-            }
-        );
+            $table->timestamps();
+            $table->index('created_at');
+            $table->index('updated_at');
+        });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function migrateDown()
+    public function down(): void
     {
-        $this->drop($this->table);
+        Schema::connection('tracker')->dropIfExists($this->table);
     }
-}
+};

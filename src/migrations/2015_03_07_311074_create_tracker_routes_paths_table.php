@@ -1,45 +1,31 @@
 <?php
 
-use PragmaRX\Tracker\Support\Migration;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateTrackerRoutesPathsTable extends Migration
+return new class extends Migration
 {
     /**
-     * Table related to this migration.
-     *
-     * @var string
-     */
-    private $table = 'tracker_route_paths';
-
-    /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function migrateUp()
+    public function up(): void
     {
-        $this->builder->create(
-            $this->table,
-            function ($table) {
-                $table->bigIncrements('id');
-
-                $table->bigInteger('route_id')->unsigned()->index();
-                $table->string('path')->index();
-
-                $table->timestamps();
-                $table->index('created_at');
-                $table->index('updated_at');
-            }
-        );
+        Schema::connection('tracker')->create('tracker_route_paths', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('route_id')->index();
+            $table->string('path')->index();
+            $table->timestamps();
+            $table->index('created_at');
+            $table->index('updated_at');
+        });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function migrateDown()
+    public function down(): void
     {
-        $this->drop($this->table);
+        Schema::connection('tracker')->dropIfExists('tracker_route_paths');
     }
-}
+};
