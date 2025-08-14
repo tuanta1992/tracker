@@ -18,7 +18,11 @@ class Tracker
     public function handle($request, Closure $next)
     {
         if (Config::get('tracker.enabled')) {
-            app('tracker')->boot();
+            $user = auth()->user();
+            // Nếu chưa login hoặc không phải admin thì boot Tracker
+            if (!$user) {
+                app('tracker')->boot();
+            }
         }
 
         return $next($request);
