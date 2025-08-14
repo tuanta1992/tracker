@@ -7,8 +7,6 @@ use Symfony\Component\Console\Application;
 
 class Base extends Eloquent
 {
-    public $modelCacheEnabled = true;
-
     protected $hidden = ['config'];
 
     private $config;
@@ -35,9 +33,7 @@ class Base extends Eloquent
     {
         parent::save($options);
 
-        if ($this->modelCacheEnabled) {
-            app('tracker.cache')->makeKeyAndPut($this, $this->getKeyName());
-        }
+        app('tracker.cache')->makeKeyAndPut($this, $this->getKeyName());
     }
 
     public function setConfig($config)

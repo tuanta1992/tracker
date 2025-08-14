@@ -29,7 +29,7 @@ abstract class Repository implements RepositoryInterface
 
         $this->connection = $this->getModel()->getConnectionName();
 
-        $this->cache = $this->model->modelCacheEnabled ? app('tracker.cache') : app('noopfacade');
+        $this->cache = app('tracker.cache');
     }
 
     public function where($key, $operation, $value = null)
