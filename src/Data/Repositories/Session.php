@@ -98,19 +98,11 @@ class Session extends Repository
         } else {
             $session = $this->find($this->getSessionData('id'));
 
-            if (!$session->updated_at || $session->updated_at->gte(now()->subMinutes(2))) {
-                $session->updated_at = Carbon::now();
+            $now = Carbon::now();
+            if (!$session->updated_at || $session->updated_at->gte($now->subMinutes(1))) {
+                $session->updated_at = $now;
                 $session->save();
             }
-
-//            // Kiểm tra idle timeout 30 phút
-//            if (!$session->updated_at || $session->updated_at->lt(now()->subMinutes(30))) {
-//                $session = $this->findOrCreate($this->sessionInfo, ['uuid']);
-//                $this->sessionSetId($session->id);
-//            } else {
-//                $session->updated_at = Carbon::now();
-//                $session->save();
-//            }
 
             $this->sessionInfo['id'] = $this->getSessionData('id');
         }

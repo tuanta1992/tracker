@@ -3,30 +3,30 @@
 namespace PragmaRX\Tracker\Vendor\Laravel\Middlewares;
 
 use Closure;
-use Config;
+use Illuminate\Support\Facades\Config;
+use PragmaRX\Tracker\Vendor\Laravel\Models\Log;
 
 class Tracker
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
-     *
-     * @return mixed
-     */
     public function handle($request, Closure $next)
     {
         if (Config::get('tracker.enabled')) {
-            // Nếu không phải là admin thì boot Tracker
             $user = auth()->user();
-
-            // Kiểm tra URL đã được log trong session chưa
-            $session = app('tracker')->currentSession();
             $currentUrl = $request->path();
-            $loggedUrls = $session->pageViews()->pluck('path')->toArray();
+            $currentSession = session()->get(Config::get('tracker.tracker_session_name'));
 
-            if (!in_array($currentUrl, $loggedUrls) && !$user) {
+            if (!$currentSession || empty($currentSession['id'])) {
+                $urlExists = false;
+            } else {
+                $urlExists = Log::query()
+                    ->where('session_id', $currentSession['id'])
+                    ->join('tracker_paths', 'tracker_log.path_id', '=', 'tracker_paths.id')
+                    ->where('tracker_paths.path', $currentUrl)
+                    ->exists();
+            }
+
+            // Nếu không phải là admin hoặc là current session này chưa xem page này thì boot Tracker
+            if (!$user && !$urlExists) {
                 app('tracker')->boot();
             }
         }
