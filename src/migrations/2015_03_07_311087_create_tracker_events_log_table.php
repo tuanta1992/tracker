@@ -15,7 +15,8 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('event_id')->index();
             $table->unsignedBigInteger('class_id')->nullable()->index();
-            $table->unsignedBigInteger('log_id')->index();
+            $table->unsignedBigInteger('log_id')->nullable()->index();
+            $table->char('user_id', 32)->nullable()->index();
             $table->timestamps();
             $table->index('created_at');
             $table->index('updated_at');

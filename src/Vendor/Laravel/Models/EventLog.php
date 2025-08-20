@@ -11,6 +11,7 @@ class EventLog extends Base
         'class_id',
         'class_ref_id',
         'log_id',
+        'user_id',
         'extra_data',
     ];
 
