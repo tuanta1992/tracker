@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::connection('tracker')->create('tracker_events', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->index();
+            $table->char('user_id', 32)->nullable()->index();
             $table->timestamps();
             $table->index('created_at');
             $table->index('updated_at');

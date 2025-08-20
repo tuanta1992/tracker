@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
 
             $table->string('uuid')->unique()->index();
-            $table->unsignedBigInteger('user_id')->nullable()->index();
+            $table->char('user_id', 32)->nullable()->index();
             $table->unsignedBigInteger('device_id')->nullable()->index();
             $table->unsignedBigInteger('agent_id')->nullable()->index();
             $table->string('client_ip')->index();
