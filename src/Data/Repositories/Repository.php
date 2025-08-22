@@ -117,7 +117,7 @@ abstract class Repository implements RepositoryInterface
 
         if (!$model) {
             // Retry in event there's a duplicate race condition
-            $model = retry(2, function() use ($otherModel, $attributes, $keys, $cacheKey) {
+            $model = retry(2, function() use ($otherModel, $attributes, $keys, $cacheKey, &$created) {
                 $model = $this->newQuery($otherModel);
 
                 $keys = $keys ?: array_keys($attributes);
