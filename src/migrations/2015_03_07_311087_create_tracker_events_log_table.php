@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('class_id')->nullable()->index();
             $table->unsignedBigInteger('log_id')->nullable()->index();
             $table->char('user_id', 32)->nullable()->index();
+            $table->json('utm')->nullable()->comment('Tracking UTM');
             $table->timestamps();
             $table->index('created_at');
             $table->index('updated_at');
