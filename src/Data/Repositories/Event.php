@@ -103,6 +103,7 @@ class Event extends Repository
                     'event_id' => $evenId,
                     'class_id' => $classId,
                     'user_id' => $event['user_id'] ?? null,
+                    'utm' => $event['utm'] ?? null,
                 ]
             );
         }
