@@ -13,9 +13,10 @@ class EventLog extends Base
         'log_id',
         'user_id',
         'extra_data',
+        'utm',
     ];
 
-    protected $casts = [ 'extra_data' => 'array' ];
+    protected $casts = [ 'extra_data' => 'array', 'utm' => 'json' ];
     
     protected $_systemModel = false;
     
